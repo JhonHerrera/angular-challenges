@@ -7,20 +7,15 @@
   />
 
   <section>
-
-    <app-list-item
-      *ngFor="let item of list"
-      [name]="item.name"
+    <ng-container *ngFor="let item of list">
+      <ng-template
+        [ngTemplateOutlet]="rowTemplate"
+        [ngTemplateOutletContext]="{ $implicit: item }"
       >
-
-      <button (click)="deleteId(item.id)">
-        <img class="h-5" src="assets/svg/trash.svg" />
-      </button>
-
-    </app-list-item>
+      </ng-template>
+    </ng-container >
   </section>
 
-  
   <button
     class="border border-blue-500 bg-blue-300 p-2 rounded-sm"
     (click)="addNewItem.emit()">

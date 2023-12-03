@@ -16,18 +16,25 @@ import { ListItemComponent } from '../../ui/list-item/list-item.component';
       customClass="bg-light-green"
       [list]="students"
       [cardImg]="image"
-      (addNewItem)="addStudent()"
-      (delete)="deleteStudent($event)">
+      (addNewItem)="addStudent()">
+      <ng-template #newRef let-student>
+        <app-list-item (delete)="deleteStudent(student.id)">
+          {{ student.name }}
+        </app-list-item>
+      </ng-template>
     </app-card>
   `,
   standalone: true,
-  imports: [CardComponent],
+  imports: [CardComponent, ListItemComponent],
 })
 export class StudentCardComponent implements OnInit {
   students: Student[] = [];
   image = 'assets/img/student.webp';
 
-  constructor(private http: FakeHttpService, private store: StudentStore) {}
+  constructor(
+    private http: FakeHttpService,
+    private store: StudentStore,
+  ) {}
 
   ngOnInit(): void {
     this.http.fetchStudents$.subscribe((s) => this.store.addAll(s));

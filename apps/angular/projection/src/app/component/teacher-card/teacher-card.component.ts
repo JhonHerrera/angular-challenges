@@ -16,18 +16,25 @@ import { NgFor } from '@angular/common';
       customClass="bg-light-red"
       [list]="teachers"
       [cardImg]="image"
-      (addNewItem)="addTeacher()"
-      (delete)="deleteTeacher($event)">
+      (addNewItem)="addTeacher()">
+      <ng-template #newRef let-teacher>
+        <app-list-item (delete)="deleteTeacher(teacher.id)">
+          {{ teacher.name }}
+        </app-list-item>
+      </ng-template>
     </app-card>
   `,
   standalone: true,
-  imports: [CardComponent, ListItemComponent, NgFor],
+  imports: [CardComponent, ListItemComponent],
 })
 export class TeacherCardComponent implements OnInit {
   teachers: Teacher[] = [];
   image = 'assets/img/teacher.png';
 
-  constructor(private http: FakeHttpService, private store: TeacherStore) {}
+  constructor(
+    private http: FakeHttpService,
+    private store: TeacherStore,
+  ) {}
 
   ngOnInit(): void {
     this.http.fetchTeachers$.subscribe((t) => this.store.addAll(t));
